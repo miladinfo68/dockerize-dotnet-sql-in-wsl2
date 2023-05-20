@@ -1,0 +1,19 @@
+# Start with the official .NET 6.0 SDK image
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /app
+EXPOSE 80
+
+# Copy the project file and restore dependencies
+COPY ./src/ApiImage/*.csproj ./
+RUN dotnet restore
+
+# Copy the rest of the application code
+COPY ./src/ApiImage ./
+RUN dotnet publish -c Release -o out
+
+# Start with the official .NET 6.0 runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/out ./
+ENTRYPOINT ["dotnet", "ApiImage.dll"]
+

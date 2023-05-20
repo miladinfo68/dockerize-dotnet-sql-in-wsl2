@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Responsive Webpage</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    label {
+      display: none;
+      cursor: pointer;
+    }
+    
+    .menu-icon {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    
+    #menu-toggle:checked ~ #sidebar {
+      transform: translateX(0);
+    }
+    
+    #menu-toggle:checked ~ main {
+      transform: translateX(250px);
+    }
+    
+    #menu-toggle:checked ~ header .menu-icon:before {
+      content: "\f00d";
+    }
+    
+    #sidebar {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      width: 250px;
+      height: calc(100% - 50px);
+      background-color: #ccc;
+      padding: 10px;
+      transform: translateX(-250px);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    #sidebar h2 {
+      margin-top: 0;
+    }
+    
+    main {
+      padding: 10px;
+      margin-top: 50px;
+      transform: translateX(0);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    @media screen and (max-width: 768px) {
+      .menu-icon {
+        display: block;
+      }
+      
+      #sidebar {
+        width: 100%;
+        height: auto;
+        transform: translateX(-100%);
+      }
+      
+      #menu-toggle:checked ~ #sidebar {
+        transform: translateX(0);
+      }
+      
+      #menu-toggle:checked ~ main {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>My Website</h1>
+    <label for="menu-toggle" class="menu-icon">&#9776;</label>
+    <input type="checkbox" id="menu-toggle">
+  </header>
+  
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <h2>Sidebar</h2>
+    <ul>
+      <li><a href="#">Link 1</a></li>
+      <li><a href="#">Link 2</a></li>
+      <li><a href="#">Link 3</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Main Content -->
+  <main>
+    <h2>Welcome to My Website</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat lacus sit amet odio tristique luctus. Morbi auctor nibh et sem sagittis commodo. Aliquam varius bibendum quam, eu cursus sapien tristique quis. Praesent blandit pharetra purus vel tempus. Nam sit
+        amet elit euismod, a dictum eros aliquet. Praesent vel ante non est euismod feugiat at id odio. Fusce id nibh euismod, pretium dui ut, facilisis augue. Nam euismod velit nec suscipit lobortis. Fusce placerat euismod nisi, id hendrerit mi vestibulum ac. Donec ut gravida sapien, sit amet hendrerit velit. In vel justo elit. Nulla feugiat lectus ipsum, eu dapibus mauris iaculis in. Etiam sit amet gravida augue. Aliquam ornare lobortis nisl, eu lacinia turpis venenatis eget. </p>
+        <p>Curabitur sed sapien non elit dictum blandit. Fusce eget urna id ex sagittis euismod. Sed pretium, nunc at gravida convallis, metus lorem sagittis nulla, id malesuada sapien diam sed arcu. Nam nec aliquet orci. Integer efficitur dui quis semper finibus. Sed at nulla non ligula tincidunt pretium. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam euismod, nisl id dignissim eleifend, mi nunc fermentum ante, ut pellentesque lorem elit ac turpis. </p>
+    </main>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2023 My Website. All rights reserved.</p>
+    </footer>
+  </body>
+  </html>        

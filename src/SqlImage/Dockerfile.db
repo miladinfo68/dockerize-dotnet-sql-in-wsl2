@@ -1,0 +1,129 @@
+
+FROM mcr.microsoft.com/mssql/server:2022-latest
+
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=$SQL_SA_USER_PASSWORD
+
+COPY ./src/SqlImage/ /
+# COPY ./src/SqlImage/initdb.sql /initdb.sql
+# COPY ./src/SqlImage/entrypoint.sh /entrypoint.sh
+
+# Switch to root user to grant write permission  to entrypoint.sh
+USER root
+# # # # # Grant execute permission to the entrypoint script
+RUN chmod +x entrypoint.sh
+
+# Switch back to default user to connect to sql server 
+USER mssql
+
+
+ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]
+
+CMD [ "/opt/mssql/bin/sqlservr" ]
+
+
+
+
+
+
+
+
+
+
+# # FROM mcr.microsoft.com/mssql/server:2022-latest
+# FROM mcr.microsoft.com/mssql/server
+# # Copy the SQL script to a known location in the container
+# COPY ./src/SqlImage/initdb.sql  /docker-entrypoint-initdb.d/
+
+# # Set the environment variables for SQL Server
+# ENV SA_PASSWORD=$SQL_SA_PASSWORD
+# ENV ACCEPT_EULA=Y
+
+# # Run the SQL script during the container initialization
+# CMD /opt/mssql/bin/sqlservr
+
+# Run the SQL script during the image build
+# RUN /opt/mssql-tools/bin/sqlcmd -S $SQL_HOST_NAME -U sa -P $SQL_SA_PASSWORD -d master -C -i ./docker-entrypoint-initdb.d/initdb.sql
+
+
+
+
+
+
+# FROM mcr.microsoft.com/mssql/server
+
+# USER root
+
+# COPY ./src/SqlImage/initdb.sql initdb.sql
+# COPY ./src/SqlImage/entrypoint.sh entrypoint.sh
+
+# # # Change the ownership of the files to the mssql user
+# # USER root
+# # RUN chown mssql initdb.sql entrypoint.sh
+# # USER mssql
+
+# # # # # Grant execute permission to the entrypoint script
+# RUN chmod +x entrypoint.sh
+
+# USER mssql
+
+
+# # Set the entrypoint to run the initialization script
+# # ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]
+# CMD /bin/bash ./entrypoint.sh
+
+# # Set environment variables to accept the license agreement and set the SA password
+# ENV ACCEPT_EULA=Y
+# ENV SA_PASSWORD=$SQL_SA_PASSWORD
+
+
+
+
+# FROM mcr.microsoft.com/mssql/server
+# EXPOSE 1344
+# WORKDIR /scripts
+# COPY ./CustomSqlImage/initdb.sql ./
+# ENV ACCEPT_EULA=Y
+# ENV SA_PASSWORD=Pass123!
+# ENV MSSQL_SA_PASSWORD=Pass123!
+# ENV TZ=UTC
+# ENTRYPOINT ["/opt/mssql-tools/bin/sqlcmd", "-S", "127.0.0.1,1433", "-U", "sa", "-P", "Pass123!", "-d", "master", "-C","-i", "initdb.sql"]
+# # ENTRYPOINT ["/opt/mssql-tools/bin/sqlcmd", "-S", "127.0.0.1,1433", "-U", "sa", "-P", "Pass123!", "-i", "initdb.sql"]
+# # ENTRYPOINT ["/opt/mssql-tools/bin/sqlcmd", "-S", "127.0.0.1,1433", "-U", "sa", "-P", "Pass123!", "-C", "-i", "initdb.sql"]
+
+
+###########################################
+
+# sqlcmd flags
+# -S or -Server: Specifies the name or IP address of the SQL Server instance to connect to, along with an optional port number. Example: -S myserver\sqlexpress,1433.
+
+# -U or -Username: Specifies the login name to use to connect to SQL Server. Example: -U sa.
+
+# -P or -Password: Specifies the password to use to connect to SQL Server. Example: -P mypassword.
+
+# -d or -Database: Specifies the name of the database to use when connecting to SQL Server. Example: -d mydatabase.
+
+# -i or -InputFile: Specifies the name of a file containing SQL statements to execute on the specified SQL Server instance. Example: -i myscript.sql.
+
+# -q or -Query: Specifies a single T-SQL statement to execute on the specified SQL Server instance. Example: -q "SELECT * FROM mytable".
+
+# -C or -TrustServerCertificate: Specifies that the client should trust the server certificate when connecting to SQL Server. Example: -C.
+
+# -l or -List: Lists available servers or databases on the network. Example: -l.
+
+# -h or -Headers: Specifies that column headers should be included in the output of a query. Example: -h ON.
+
+# -s or -ColSeparator: Specifies the column separator character to use in the output of a query. Example: -s ,.
+
+# -t specifies the query timeout in seconds. In the example command, -t 30 sets the query timeout to 30 seconds.
+
+# -l specifies the login timeout in seconds. In the example command, -l 30 sets the login timeout to 30 seconds.
+
+# -e enables the printing of error messages to the console. In the example command, -e is used to enable error printing.
+
+# -b specifies that sqlcmd should exit immediately if an error occurs. In the example command, -b is used to force the command to exit on error.
+
+# These are just a few of the many flags available for the sqlcmd command. You can find a complete list of flags and their descriptions in the sqlcmd documentation.
+# Regenerate response
+
+###########################################

@@ -1,0 +1,65 @@
+version: "3.9"
+
+networks:
+  backend:
+    # driver: bridge
+
+    # volumes:
+    #   sqldata:    
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql
+    restart: on-failure
+    volumes:
+      - ${LOCAL_VOLUME_PATH}:/var/opt/mssql/data
+      # - sqldata:/var/opt/mssql
+    environment:
+      - SA_PASSWORD=${SQL_SA_USER_PASSWORD}
+      - ACCEPT_EULA=Y
+    ports:
+      - "${SQL_HOST_PORT}:1433"   
+    networks:
+      - backend          
+
+  # sql:
+  #   image: sql
+  #   container_name: sql
+  #   restart: on-failure
+  #   # restart: always
+  #   # user: mssql
+  #   build:
+  #     context: .
+  #     dockerfile: ./src/SqlImage/Dockerfile.db
+  #   volumes:
+  #     - ${LOCAL_VOLUME_PATH}:/var/opt/mssql/data
+  #     # - sqldata:/var/opt/mssql      
+  #   environment:
+  #     - SA_PASSWORD=${SQL_SA_USER_PASSWORD}
+  #     - ACCEPT_EULA=Y
+  #   ports:
+  #     - "${SQL_HOST_PORT}:1433"
+  #   networks:
+  #     - backend
+
+  web:
+    image: web
+    container_name: web
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./src/ApiImage/Dockerfile.Api
+    depends_on: [ sql ]
+    ports:
+      - "${APP_HTTP_PORT}:80"
+      # environment:  
+      #   - APP_HTTP_PORT=${APP_HTTP_PORT}
+      #   - ASPNETCORE_ENVIRONMENT=${APP_ENVIRONMENT} 
+      #   - ASPNETCORE_URLS=http://+${APP_HTTP_PORT}
+      # - SQL_CONNECTION_STRING=Server=sql;database=TestDb;User Id=sa;Password=Pass123!;TrustServerCertificate=True;
+      # - ConnectionString__DefaultDB=Data Source=sql;Initial Catalog=TestDb;User Id=sa;Password=Pass123!;TrustServerCertificate=True;
+    networks:
+      - backend
+
+
